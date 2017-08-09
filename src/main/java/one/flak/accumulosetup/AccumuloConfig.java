@@ -13,6 +13,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class AccumuloConfig {
     static final String INSTANCE_ID = "instanceId";
@@ -90,6 +91,20 @@ public class AccumuloConfig {
 
         return options;
     }
+
+
+    public static Map<String, String> getAccumuloDataStoreConf(Properties props) {
+        Map<String , String> dsConf = new HashMap<String , String>();
+
+        for (String param : ACCUMULO_CONNECTION_PARAMS) {
+            dsConf.put(param, props.getProperty(param));
+        }
+
+        if (dsConf.get(AUTHS) == null) dsConf.put(AUTHS, "");
+
+        return dsConf;
+    }
+
 
     public static Map<String, String> getAccumuloDataStoreConf(CommandLine cmd) {
         Map<String , String> dsConf = new HashMap<String , String>();

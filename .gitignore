@@ -29,4 +29,6 @@ target
 
 *.iml
 
-configuration.properties
+*.properties
+csv_ingest_configuration.properties.2
+

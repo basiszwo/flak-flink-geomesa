@@ -1,0 +1,11 @@
+startDate=20160801
+endDate=20160830
+
+inputFolder=/mnt/volume-fra1-01/trip-samples/
+
+instanceId=flakone
+zookeepers=host.tld:2181
+user=root
+password=super-secret-password
+tableName=myTableName
+
