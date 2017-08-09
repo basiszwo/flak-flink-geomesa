@@ -38,11 +38,16 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
     // will be created if it does not exist
     private final String tableName;
 
-    // name of the SimpleFeatureType
     private final String simpleFeatureTypeName;
+
     protected SimpleFeatureType simpleFeatureType;
+
     // dataStore that holds connection to accumulo
     private DataStore dataStore;
+
+    private DefaultFeatureCollection featureCollection;
+
+    public final int BATCH_SIZE = 2500;
 
 
     public BaseGeomesaSink(String zookeepers, String instanceId, String user, String password, String tableName, String simpleFeatureTypeName) {
@@ -54,11 +59,17 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
         this.simpleFeatureTypeName = simpleFeatureTypeName;
     }
 
+
     @Override
     public void invoke(TEntity entity) throws Exception {
         SimpleFeature simpleFeature = buildSimpleFeature(entity);
 
         insertSimpleFeature(simpleFeature);
+
+        if(requiresFlush()) {
+            flushFeatureCollection();
+        }
+
     }
 
     @Override
@@ -74,10 +85,14 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
 
         this.dataStore = DataStoreFinder.getDataStore(dataStoreConf);
         this.simpleFeatureType = createSimpleFeatureType(simpleFeatureTypeName);
+        this.featureCollection = new DefaultFeatureCollection();
     }
 
     @Override
     public void close() throws Exception {
+        // Always flush the feature collection, so that no feature gets lost.
+        // flushFeatureCollection();
+
         // close connection
         dataStore.dispose();
     }
@@ -86,18 +101,26 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
 
     abstract SimpleFeature buildSimpleFeature(TEntity entity);
 
-    private void insertSimpleFeature(SimpleFeature simpleFeature) {
-        DefaultFeatureCollection featureCollection = new DefaultFeatureCollection();
-        featureCollection.add(simpleFeature);
+    private boolean requiresFlush() {
+        return this.featureCollection.size() >= BATCH_SIZE;
+    }
 
+    private void insertSimpleFeature(SimpleFeature simpleFeature) {
+        this.featureCollection.add(simpleFeature);
+    }
+
+    private void flushFeatureCollection() {
         FeatureStore featureStore = null;
         try {
             featureStore = (SimpleFeatureStore) dataStore.getFeatureSource(simpleFeatureTypeName);
 
-            // @TODO: Use Bulkwriter to improve performance
-            featureStore.addFeatures(featureCollection);
+            featureStore.addFeatures(this.featureCollection);
+
+            featureCollection.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }
