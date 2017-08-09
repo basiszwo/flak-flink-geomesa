@@ -40,7 +40,7 @@ public class JsonToAccumuloConverter {
         System.out.println("ACCESSING DATA STORE");
         DataStore dataStore = getAccumuloDataStore(cmd);
 
-        String filename = cmd.getOptionValue("filePath", "/Volumes/WD 2TB NEU/Diplomarbeit/samples-converted/20170219/1385700.json");
+        String filename = cmd.getOptionValue("filePath", "/Volumes/WD 2TB NEU/Diplomarbeit/samples-converted/20170219/1386035.json");
 
         JsonArray tripSamples = FileHelpers.readJsonFromFile(filename).getAsJsonArray();
 
@@ -55,29 +55,35 @@ public class JsonToAccumuloConverter {
         String tripIdentifier = String.valueOf(UUID.randomUUID());
 
         for(JsonElement sample : tripSamples) {
+//            featureCollection = new DefaultFeatureCollection();
+
             SimpleFeature simpleFeature = SimpleFeatureBuilder.build(simpleFeatureType, emptyFeature, null);
 
-            JsonObject json = sample.getAsJsonObject();
-            long rawTimestamp = (long)(json.get("timestamp").getAsDouble() * 1000);
-            double latitude = Double.parseDouble(json.get("latitude").getAsString());
-            double longitude = Double.parseDouble(json.get("longitude").getAsString());
-            double accelerationZ = Double.parseDouble(json.get("accl_z").getAsString());
+            try {
+                JsonObject json = sample.getAsJsonObject();
+                long rawTimestamp = (long)(json.get("timestamp").getAsDouble() * 1000);
+                double latitude = Double.parseDouble(json.get("latitude").getAsString());
+                double longitude = Double.parseDouble(json.get("longitude").getAsString());
+                double accelerationZ = Double.parseDouble(json.get("accl_z").getAsString());
 
-            simpleFeature.setAttribute("OccuredAt", new DateTime().withMillis(rawTimestamp).toDate());
-            simpleFeature.setAttribute("TripIdentifier", tripIdentifier);
-            simpleFeature.setAttribute("AccelerationZ", accelerationZ);
+                simpleFeature.setAttribute("OccuredAt", new DateTime().withMillis(rawTimestamp).toDate());
+                simpleFeature.setAttribute("TripIdentifier", tripIdentifier);
+                simpleFeature.setAttribute("AccelerationZ", accelerationZ);
 
-            Geometry geometry = WKTUtils.read("POINT(" + latitude + " " + longitude + ")");
-            simpleFeature.setAttribute("SamplePosition", geometry);
+                Geometry geometry = WKTUtils.read("POINT(" + latitude + " " + longitude + ")");
+                simpleFeature.setAttribute("SamplePosition", geometry);
 
-            featureCollection.add(simpleFeature);
+                featureCollection.add(simpleFeature);
 
-            System.out.println(
-                    "TripId " + tripIdentifier + " | " +
-                            "OccuredAt " + new Date(rawTimestamp) + " | " +
-                            "Position " + latitude + " / " + longitude + " | " +
-                            "AccelerationZ " + accelerationZ + " | "
-            );
+                System.out.println(
+                        "TripId " + tripIdentifier + " | " +
+                                "OccuredAt " + new Date(rawTimestamp) + " | " +
+                                "Position " + latitude + " / " + longitude + " | " +
+                                "AccelerationZ " + accelerationZ + " | "
+                );
+            } catch (UnsupportedOperationException name) {
+                System.out.println("JSON parse error ... skipping");
+            }
         }
 
         System.out.printf("INSERTING %d samples ...", tripSamples.size());
