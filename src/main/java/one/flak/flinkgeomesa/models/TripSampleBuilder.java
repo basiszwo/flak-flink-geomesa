@@ -18,6 +18,11 @@ public class TripSampleBuilder {
         return this;
     }
 
+    public TripSampleBuilder setOccuredAt(long occuredAt) {
+        this.occuredAt = new Date(occuredAt);
+        return this;
+    }
+
     public TripSampleBuilder setTripIdentifier(String tripIdentifier) {
         // this.tripIdentifier = tripIdentifier;
         this.tripIdentifier = String.valueOf(UUID.randomUUID());
