@@ -35,16 +35,14 @@ scp target/accumulo-setup-1.0-SNAPSHOT-jar-with-dependencies.jar user@host:
 
 ### Run the setup program
 
-```
-java -cp ~/accumulo-setup-1.0-SNAPSHOT-jar-with-dependencies.jar \
-    IothAccumuloSetup \
-    -instanceId ioth \
-    -zookeepers localhost:2181 \
-    -user root \
-    -password <rootPassword> \
-    -tableName <namespace>.<tableName>
-```
+This will create the Simple Feature Type defined in the `accumulot-setup` package.
 
-The `namespace` needs to be aligned with the one from the accumulo setup when installing the geomesa support to accumulo.
-`tableName` can be anything. e.g. namespace is "geomesa" and tableName is "iothSamples" then the table
-`geomesa.iothSamples` will be used (and created if it doesn't exist)
+```
+java -cp flinkgeomesa-1.0-SNAPSHOT-jar-with-dependencies.jar \
+  one.flak.accumulosetup.AccumuloSetup \
+  --instanceId flakone \
+  --zookeepers accumulo-1.flak.one:2181 \
+  --user root \
+  --password xxx \
+  --tableName flak_samples
+```
