@@ -10,18 +10,16 @@ public class TripSample {
     private String tripIdentifier;
     private double latitude;
     private double longitude;
-    private String vin;
     private double accelerationX;
     private double accelerationY;
     private double accelerationZ;
 
 
-    public TripSample(Date occuredAt, String tripIdentifier, double latitude, double longitude, String vin, double accelerationX, double accelerationY, double accelerationZ) {
+    public TripSample(Date occuredAt, String tripIdentifier, double latitude, double longitude, double accelerationX, double accelerationY, double accelerationZ) {
         this.occuredAt = occuredAt;
         this.tripIdentifier = tripIdentifier;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.vin = vin;
         this.accelerationX = accelerationX;
         this.accelerationY = accelerationY;
         this.accelerationZ = accelerationZ;
@@ -41,10 +39,6 @@ public class TripSample {
 
     public double getLongitude() {
         return longitude;
-    }
-
-    public String getVin() {
-        return vin;
     }
 
     public double getAccelerationX() {

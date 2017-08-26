@@ -8,7 +8,6 @@ public class TripSampleBuilder {
     private String tripIdentifier = "";
     private double latitude;
     private double longitude;
-    private String vin = "";
     private double accelerationX = 0.0;
     private double accelerationY = 0.0;
     private double accelerationZ;
@@ -39,11 +38,6 @@ public class TripSampleBuilder {
         return this;
     }
 
-    public TripSampleBuilder setVin(String vin) {
-        this.vin = vin;
-        return this;
-    }
-
     public TripSampleBuilder setAccelerationX(double accelerationX) {
         this.accelerationX = accelerationX;
         return this;
@@ -60,6 +54,6 @@ public class TripSampleBuilder {
     }
 
     public TripSample createTripSample() {
-        return new TripSample(occuredAt, tripIdentifier, latitude, longitude, vin, accelerationX, accelerationY, accelerationZ);
+        return new TripSample(occuredAt, tripIdentifier, latitude, longitude, accelerationX, accelerationY, accelerationZ);
     }
 }
