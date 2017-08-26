@@ -25,13 +25,6 @@ public class TripSampleCsvReader {
         TripSampleBuilder builder = new TripSampleBuilder();
 
         builder.setOccuredAt(SafeCsvGetter.getLong(reader.get(0)));
-//        builder.setTripId(reader.get(1));
-//        builder.setTripUuid(reader.get(2));
-//        builder.setTripUid(reader.get(3));
-//        builder.setSpeed(SafeCsvGetter.getInt(reader.get(4)));
-//        builder.setVin(reader.get(5));
-//        builder.setAccelerationX(SafeCsvGetter.getDouble(reader.get(6)));
-//        builder.setAccelerationY(SafeCsvGetter.getDouble(reader.get(7)));
         builder.setAccelerationZ(SafeCsvGetter.getDouble(reader.get(8)));
         builder.setLatitude(SafeCsvGetter.getDouble(reader.get(9)));
         builder.setLongitude(SafeCsvGetter.getDouble(reader.get(10)));
