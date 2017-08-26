@@ -4,7 +4,7 @@
 
 This package is to be used to setup accumulo.
 
-We setup a `SimpleFeatureType` named `IothAccelerations` along with the folowing schema
+We setup a `SimpleFeatureType` named `FlakAcceleration` along with the folowing schema
 
 ```
 "OccuredAt:Date"
