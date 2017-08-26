@@ -1,5 +1,5 @@
-// Copyright (c) Stefan Botzenhart. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Licensed under the GNU GENERAL PUBLIC LICENSE Version 3.
+// See LICENSE file in the project root for full license information.
 
 package one.flak.flinkgeomesa.sinks;
 
@@ -59,7 +59,6 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
         this.simpleFeatureTypeName = simpleFeatureTypeName;
     }
 
-
     @Override
     public void invoke(TEntity entity) throws Exception {
         SimpleFeature simpleFeature = buildSimpleFeature(entity);
@@ -69,7 +68,6 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
         if(requiresFlush()) {
             flushFeatureCollection();
         }
-
     }
 
     @Override
@@ -121,6 +119,4 @@ public abstract class BaseGeomesaSink<TEntity> extends RichSinkFunction<TEntity>
             e.printStackTrace();
         }
     }
-
-
 }
